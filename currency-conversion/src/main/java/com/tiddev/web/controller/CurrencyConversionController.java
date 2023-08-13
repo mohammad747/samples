@@ -1,6 +1,9 @@
-package com.hashemi.microservice.currencyconversionservice;
+package com.tiddev.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.tiddev.clients.currencyExchange.CurrencyExchangeClient;
+import com.tiddev.clients.currencyExchange.dto.CurrencyConversion;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,10 +14,11 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 @RestController
+@RequiredArgsConstructor
 public class CurrencyConversionController {
 
-    @Autowired
-    private CurrencyExchangeProxy currencyExchangeProxy;
+    private final CurrencyExchangeClient currencyExchangeClient;
+    private final RestTemplate restTemplate;
 
     @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversion(@PathVariable String from,
@@ -25,7 +29,7 @@ public class CurrencyConversionController {
         uriVariables.put("to", to);
 
         ResponseEntity<CurrencyConversion> responseEntity =
-                new RestTemplate().getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}",
+                restTemplate.getForEntity("http://currency-exchange/currency-exchange/from/{from}/to/{to}",
                         CurrencyConversion.class, uriVariables);
 
         CurrencyConversion currencyConversion = responseEntity.getBody();
@@ -39,7 +43,7 @@ public class CurrencyConversionController {
                                                                @PathVariable BigDecimal quantity) {
 
 
-        CurrencyConversion currencyConversion = currencyExchangeProxy.retrieveExchangeValue(from, to);
+        CurrencyConversion currencyConversion = currencyExchangeClient.retrieveExchangeValue(from, to);
 
 
         currencyConversion.setTotalCalculatedAmount(currencyConversion.getConversionMultiple().multiply(quantity));

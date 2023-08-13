@@ -1,4 +1,4 @@
-package com.tiddev.currencyExchange.dto;
+package com.tiddev.clients.currencyExchange.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

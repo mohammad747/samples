@@ -1,6 +1,6 @@
-package com.tiddev.currencyExchange;
+package com.tiddev.clients.currencyExchange;
 
-import com.tiddev.currencyExchange.dto.CurrencyConversion;
+import com.tiddev.clients.currencyExchange.dto.CurrencyConversion;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
